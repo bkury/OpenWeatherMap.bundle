@@ -1,0 +1,28 @@
+[ 
+  {
+    "id": "location1",
+    "type": "text",
+    "label": "Location 1:",
+    "default": "Geolocation"
+  }, 
+  {
+    "id": "use_celsius",
+    "type": "bool",
+    "label": "Celsius",
+    "default": "false"
+  },
+  {
+    "id": "use_24hour",
+    "type": "bool",
+    "label": 'Hours (24h)',
+    "default": "false"
+  },
+  {
+    "id": "use_language",
+    "type": "enum",
+    "label": "Language:",
+    "values": ["en", "de", "es", "it", "ua", "ru", "pt", "ro", "pl", "fi", "nl", "fr", "bg", "se", "zh_tw", "zh_cn", "tr", "hr", "ca"],
+    "default": "en"
+  }
+]
+
