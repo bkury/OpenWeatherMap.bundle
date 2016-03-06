@@ -3,7 +3,8 @@ import datetime
 
 NAME 		= 'OpenWeatherMap'
 API_URL		= 'http://api.openweathermap.org/data/2.5/%s?q='
-GEOIP_URL	= 'http://freegeoip.net/json/'
+API_KEY		= '699b28adc23863b85ef3347aa4f0967d'
+GEOIP_URL	= 'http://ipinfo.io/json'
 
 ART		= 'art-default.jpg'
 ICON		= 'icon-default.png'
@@ -14,12 +15,12 @@ UNKNOWN 	= 'NoData'
 def ConstructURL():
 
 	# Location
-	if (Prefs['location1'] == "Geolocation"):
-		geoip_req = JSON.ObjectFromURL(GEOIP_URL)
-		geoip_loc = geoip_req['city'] + ',' + geoip_req['country_code']
-		WEATHER_API_URL = API_URL + geoip_loc
-	else:
+	if (Prefs['location1']):
 		WEATHER_API_URL = API_URL + Prefs['location1']
+	else:
+		geoip_req = JSON.ObjectFromURL(GEOIP_URL,cacheTime=CACHE_1MONTH)
+		geoip_loc = geoip_req['city'] + ',' + geoip_req['country']
+		WEATHER_API_URL = API_URL + geoip_loc
 
 	# Units
 	if (Prefs['use_celsius']):
@@ -32,6 +33,12 @@ def ConstructURL():
 		WEATHER_API_URL += '&lang=' + Prefs['use_language']
 	else:
 		WEATHER_API_URL += '&lang=en'
+
+	# AppID
+	if (Prefs['use_key']):
+		WEATHER_API_URL += '&appid=' + Prefs['use_key']
+	else:
+		WEATHER_API_URL += '&appid=' + API_KEY
 
 	return WEATHER_API_URL
 
@@ -147,6 +154,7 @@ def current(title, day):
 	# Location
 	oc.add(DirectoryObject(
 		title = object_location,
+		key=Callback(current, title="Current Weather", day='weather'),
 		thumb = R(object_cond_icon),
 		art = R(object_cond_art),
 		summary = object_loc_summary
@@ -155,6 +163,7 @@ def current(title, day):
 	# Condition
 	oc.add(DirectoryObject(
 		title = object_cond_short,
+		key=Callback(current, title="Current Weather", day='weather'),
 		thumb = R(object_cond_icon),
 		art = R(object_cond_art),
 		summary = object_cond_summary
@@ -163,6 +172,7 @@ def current(title, day):
 	# Temperature
 	oc.add(DirectoryObject(
 		title = object_temp_cur,
+		key=Callback(current, title="Current Weather", day='weather'),
 		thumb = R(object_cond_icon),
 		art = R(object_cond_art),
 		summary = object_temp_summary
@@ -194,6 +204,7 @@ def hourly(title, day):
 	# Location
 	oc.add(DirectoryObject(
 		title = result['city']['name'] + ', ' + result['city']['country'],
+		key=Callback(hourly, title="Hourly Forecast", day='forecast'),
 		thumb = R(ICON),
 		art = R(ART)
 	))
@@ -228,11 +239,11 @@ def hourly(title, day):
 		# Object
 		oc.add(DirectoryObject(
 			title = object_time + ': ' + object_temp_cur + ', ' + object_cond_short,
+			key=Callback(hourly, title="Hourly Forecast", day='forecast'),
 			thumb = R(object_cond_icon),
 			art = R(object_cond_art),
 			summary = object_hourly_summary
 		))
-
 
 	return oc
 
@@ -247,6 +258,7 @@ def daily(title, day):
 	# Location
 	oc.add(DirectoryObject(
 		title = result['city']['name'] + ', ' + result['city']['country'],
+		key=Callback(daily, title="Daily Forecast", day='forecast/daily'),
 		thumb = R(ICON),
 		art = R(ART)
 	))
@@ -291,11 +303,11 @@ def daily(title, day):
 		# Object
 		oc.add(DirectoryObject(
 			title = object_time + ': ' + object_temp_cur + ', ' + object_cond_short,
+			key=Callback(daily, title="Daily Forecast", day='forecast/daily'),
 			thumb = R(object_cond_icon),
 			art = R(object_cond_art),
 			summary = object_daily_summary
 		))
-
 
 	return oc
 

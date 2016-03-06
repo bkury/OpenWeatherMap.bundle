@@ -1,11 +1,5 @@
 [ 
   {
-    "id": "location1",
-    "type": "text",
-    "label": "Location 1:",
-    "default": "Geolocation"
-  }, 
-  {
     "id": "use_celsius",
     "type": "bool",
     "label": "Celsius",
@@ -23,6 +17,18 @@
     "label": "Language:",
     "values": ["en", "de", "es", "it", "ua", "ru", "pt", "ro", "pl", "fi", "nl", "fr", "bg", "se", "zh_tw", "zh_cn", "tr", "hr", "ca"],
     "default": "en"
+  },
+  {
+    "id": "location1",
+    "type": "text",
+    "label": "Location 1:",
+    "default": ""
+  }, 
+  {
+    "id": "use_key",
+    "type": "text",
+    "label": "AppID:",
+    "default": ""
   }
 ]
 
